@@ -1,0 +1,40 @@
+<!-- templates/store/index.html -->
+{% load static %}
+<html>
+    <head>
+        <title>Store Homepage</title>
+        <script src="{%static 'store/script.js' %}"></script>  <!-- Link to custom script -->
+    </head>
+    <body>
+        <h1>Welcome to the E-commerce App!</h1>
+        <h2>Products</h2>
+        <div id="product-list"></div>
+
+        <script>
+            fetch('/api/products/')
+                .then(response => response.json())
+                .then(data => {
+                    const productList = document.getElementById('product-list');
+                    data.forEach(product => {
+                        const productElement = document.createElement('div');
+                        productElement.innerHTML = `
+                            <h3>${product.name}</h3>
+                            <p>${product.description}</p>
+                            <p>Price: $${product.price}</p>
+                            <p>Stock: ${product.stock}</p>
+                        `;
+                        productList.appendChild(productElement);
+                    });
+                })
+                .catch(error => console.error('Error fetching products:', error));
+        </script>
+        <label for="product-select">Select Product:</label>
+        <select id="product-select">
+            <!-- Product options will be populated dynamically using JavaScript -->
+        </select>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" min="1" placeholder="Enter Quantity" required>
+    
+        <button type="submit">Place Order</button>
+    </body>
+</html>
